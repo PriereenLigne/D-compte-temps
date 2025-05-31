@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Veillée - Juin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 2em;
+      text-shadow: 0 0 10px #00ffc3;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.2em;
+      margin-top: 0;
+      color: #ffb347;
+      font-style: italic;
+    }
+
+    #chrono {
+      font-size: 3.5em;
+      padding: 20px 40px;
+      border-radius: 15px;
+      margin-top: 20px;
+      box-shadow: 0 0 20px #00ffc3;
+      text-shadow: 0 0 10px #00ffc3;
+      transition: all 0.5s ease;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 1em;
+      color: #ccc;
+    }
+
+    .share-btn {
+      margin-top: 30px;
+      background-color: #25d366;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #25d366;
+      transition: transform 0.2s;
+    }
+
+    .share-btn:hover {
+      transform: scale(1.05);
+    }
+
+    audio {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      #chrono {
+        font-size: 2.2em;
+        padding: 15px 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔥21ème Edition de Prière en Ligne🔥</h1>
+  <h2>"Ne te réjouis pas à mon sujet, mon ennemi" – Michée 7:8</h2>
+
+  <div id="chrono">Chargement...</div>
+  <div id="message">Prépare ton cœur...</div>
+
+  <button class="share-btn" onclick="shareWhatsApp()">📤 Partager dans le groupe WhatsApp</button>
+
+  <audio id="minuitSound">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-flute-alert-2305.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    function getMidnightTimestamp() {
+      const now = new Date();
+      const midnight = new Date();
+      midnight.setHours(24, 0, 0, 0);
+      return midnight.getTime();
+    }
+
+    function shareWhatsApp() {
+      const text = encodeURIComponent("⏳ Rejoins la veillée de prière - 'Ne te réjouis pas à mon sujet, mon ennemi' ! Clique ici : [insère le lien ici]");
+      window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
+
+    const chrono = document.getElementById("chrono");
+    const message = document.getElementById("message");
+    const sound = document.getElementById("minuitSound");
+
+    const deadline = getMidnightTimestamp();
+
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = deadline - now;
+
+      if (distance <= 0) {
+        clearInterval(interval);
+        chrono.innerHTML = "🎉 Il est minuit ! 🎉";
+        chrono.style.backgroundColor = "#ff1744";
+        message.innerText = "Le mois de Juin commence dans la victoire 🙏";
+        sound.play();
+        return;
+      }
+
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      chrono.innerHTML = `${hours.toString().padStart(2, '0')}h : ${minutes.toString().padStart(2, '0')}m : ${seconds.toString().padStart(2, '0')}s`;
+
+      // Couleur selon le temps restant
+      if (distance <= 10 * 60 * 1000) {
+        chrono.style.boxShadow = "0 0 30px red";
+        chrono.style.color = "#ff4c4c";
+      } else if (distance <= 30 * 60 * 1000) {
+        chrono.style.boxShadow = "0 0 30px orange";
+        chrono.style.color = "orange";
+      } else {
+        chrono.style.boxShadow = "0 0 20px #00ffc3";
+        chrono.style.color = "#00ffc3";
+      }
+
+      // Message selon l'heure
+      if (hours >= 22) {
+        message.innerText = "🕯️ Prépare ton cœur, minuit approche...";
+      } else if (hours >= 20) {
+        message.innerText = "🙌 C’est la soirée du réveil, reste connecté !";
+      } else {
+        message.innerText = "📖 Prends le temps de méditer avant la veillée...";
+      }
+    }, 1000);
+  </script>
+
+</body>
+</html>
